@@ -1,0 +1,101 @@
+/* ============================================================
+   预设 ③ · 紧凑打印 (compact.css)
+   省纸优先、密度可读：窄边距、小字号、密行距。
+   适合讲义、自查稿、纸质批注用的版本。
+   ============================================================ */
+
+@page {
+  size: A4;
+  margin: 14mm 14mm 16mm 14mm;
+
+  @bottom-center {
+    content: counter(page);
+    font-family: "思源黑体", "Microsoft YaHei", sans-serif;
+    font-size: 8pt;
+    color: #9a9da2;
+    vertical-align: top;
+    padding-top: 2mm;
+  }
+}
+
+/* ---------- 正文：紧凑 ---------- */
+
+.jx-export,
+.jx-export .jx-content {
+  font-size: 9.5pt;
+  line-height: 1.62;
+  letter-spacing: 0.01em;
+  color: #3a3d42;
+  font-weight: 400;
+}
+
+.jx-content {
+  text-align: left;
+}
+
+.jx-content p {
+  margin-bottom: 0.55em;
+}
+
+/* ---------- 标题：压缩层级间距，不强制分页 ---------- */
+
+.jx-content h1 {
+  font-size: 1.35em;
+  margin: 1em 0 0.5em;
+  padding-bottom: 0.25em;
+  border-bottom: 0.75pt solid #26292e;
+  break-before: auto;
+  page-break-before: auto;
+}
+.jx-content h2 {
+  font-size: 1.18em;
+  margin: 0.9em 0 0.45em;
+}
+.jx-content h3 {
+  font-size: 1.05em;
+  margin: 0.8em 0 0.4em;
+}
+.jx-content h4,
+.jx-content h5,
+.jx-content h6 {
+  margin: 0.7em 0 0.35em;
+}
+
+/* ---------- 列表与引用 ---------- */
+
+.jx-content ul,
+.jx-content ol {
+  margin-bottom: 0.55em;
+  padding-left: 1.4em;
+}
+.jx-content li { margin: 0.12em 0; }
+.jx-content blockquote {
+  margin: 0.7em 0;
+  padding: 0.1em 0.9em;
+}
+
+/* ---------- 表格与代码：更小一号 ---------- */
+
+.jx-content table {
+  font-size: 0.8em;
+  margin: 0.7em 0;
+}
+.jx-content th,
+.jx-content td {
+  padding: 4px 9px;
+}
+.jx-content pre {
+  font-size: 0.76em;
+  padding: 7px 10px;
+  margin: 0.7em 0;
+}
+.jx-content code { font-size: 0.8em; }
+
+/* ---------- callout 与图片 ---------- */
+
+.jx-content .callout {
+  margin: 0.7em 0;
+  padding: 0.5em 0.8em;
+}
+.jx-content img { margin: 0.8em auto; }
+.jx-content hr { margin: 1.1em 0; }

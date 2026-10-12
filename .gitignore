@@ -1,0 +1,12 @@
+# 开发/本地产物
+dev-test/
+node_modules/
+jx-tmp-export.html
+
+# 导出产物
+*.pdf
+
+# 系统垃圾
+.DS_Store
+Thumbs.db
+desktop.ini

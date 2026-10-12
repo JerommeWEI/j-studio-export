@@ -1,0 +1,115 @@
+/* ============================================================
+   预设 ② · 预览快照 (snapshot.css)
+   把你的 quiet-notes 阅读美学翻译到纸上：
+   思源黑体加粗正文、行距 2.0、字距 0.03em、克制的灰色系。
+   无封面无目录，页脚小页码，安静地像你每天看的样子。
+   ============================================================ */
+
+@page {
+  size: A4;
+  margin: 18mm 18mm 18mm 18mm;
+
+  @bottom-center {
+    content: counter(page);
+    font-family: "思源黑体", "Microsoft YaHei", sans-serif;
+    font-size: 8.5pt;
+    color: #9a9da2;
+    vertical-align: top;
+    padding-top: 3mm;
+  }
+}
+
+/* ---------- 正文：忠实还原 quiet-notes ---------- */
+
+.jx-export,
+.jx-export .jx-content {
+  font-size: 11.5pt;
+  line-height: 2.0;
+  letter-spacing: 0.03em;
+  color: #4a4d52;          /* 正文淡灰（同 quiet-notes #5a5a5a 的印刷适配版） */
+  font-weight: 700;        /* quiet-notes 的加粗正文气质 */
+}
+
+.jx-content {
+  text-align: left;
+}
+
+.jx-content p {
+  margin-bottom: 1em;
+}
+
+/* ---------- 标题：同款字重层级 ---------- */
+
+.jx-content h1,
+.jx-content h2 {
+  font-weight: 900;
+  color: #2a2a2a;
+}
+.jx-content h1 {
+  font-size: 1.6em;
+  margin: 1.35em 0 0.7em;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+.jx-content h2 {
+  font-size: 1.3em;
+  margin: 1.5em 0 0.65em;
+}
+.jx-content h3 {
+  font-size: 1.12em;
+  font-weight: 700;
+  color: #2f3237;
+  margin: 1.3em 0 0.55em;
+}
+.jx-content h4 {
+  font-size: 1em;
+  font-weight: 700;
+  margin: 1.1em 0 0.5em;
+}
+
+/* 快照模式：一级标题不强制分页（保持阅读流的连续感） */
+.jx-content h1 {
+  break-before: auto;
+  page-break-before: auto;
+}
+
+/* ---------- 引用与高亮：quiet-notes 同款 ---------- */
+
+.jx-content blockquote {
+  border-left: 3px solid #bfc2c4;
+  color: #676a6f;
+}
+
+.jx-content mark {
+  background: #fdf3b6;
+}
+
+.jx-content hr {
+  border-top: 1px solid #e6e6e6;
+}
+
+/* ---------- 表格：quiet-notes 同款 ---------- */
+
+.jx-content table {
+  font-size: 0.92em;
+}
+.jx-content th,
+.jx-content td {
+  border: 1px solid #e6e6e6;
+  padding: 7px 14px;
+}
+.jx-content th,
+.jx-content td:first-child {
+  background: #f3f3f3;
+}
+
+/* ---------- 代码 ---------- */
+
+.jx-content pre {
+  background: #f3f3f3;
+  border: none;
+  font-size: 0.85em;
+}
+.jx-content code {
+  background: #f3f3f3;
+}

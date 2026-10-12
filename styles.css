@@ -1,0 +1,71 @@
+/* PDF-export · 界面样式（导出弹窗与设置页） */
+
+.jx-modal-title {
+  font-size: 1.1em;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.jx-modal-sub {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  margin-bottom: 14px;
+}
+
+.jx-preset-grid {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.jx-preset-card {
+  flex: 1;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.jx-preset-card:hover {
+  border-color: var(--text-faint);
+}
+
+.jx-preset-card.is-active {
+  border-color: var(--interactive-accent);
+  box-shadow: 0 0 0 1px var(--interactive-accent);
+}
+
+.jx-preset-name {
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.jx-preset-desc {
+  color: var(--text-muted);
+  font-size: 0.8em;
+  line-height: 1.4;
+}
+
+.jx-modal .setting-item.is-disabled {
+  opacity: 0.45;
+}
+
+.jx-modal-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.jx-css-editor {
+  font-family: var(--font-monospace);
+  width: 100%;
+}
+
+.jx-setting-note {
+  color: var(--text-muted);
+  font-size: 0.85em;
+  margin-top: 10px;
+  line-height: 1.5;
+}
