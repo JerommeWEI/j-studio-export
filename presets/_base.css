@@ -1,0 +1,558 @@
+/* ============================================================
+   PDF-export · 共享排版基础 (_base.css)
+   所有预设共用：字体系统 / 元素样式 / 分页保护 / 封面目录骨架
+   预设文件（report/snapshot/compact）只做覆盖与增补。
+   目标：即使收集不到 Obsidian 应用样式，这份基础也能独立
+   产出体面的排版。
+   ============================================================ */
+
+:root {
+  --jx-sans: "思源黑体", "Source Han Sans SC", "Noto Sans CJK SC",
+    "Microsoft YaHei", "PingFang SC", sans-serif;
+  --jx-heavy: "思源黑体 Heavy", "思源黑体", "Source Han Sans SC", sans-serif;
+  --jx-serif: "华文中宋", "Adobe 宋体 Std L", "宋体", serif;
+  --jx-mono: "Cascadia Code", "Consolas", "思源黑体", "Microsoft YaHei", monospace;
+
+  --jx-ink: #26292e;          /* 标题墨色 */
+  --jx-body-text: #3a3d42;    /* 正文 */
+  --jx-muted: #8a8d92;        /* 弱化文字 */
+  --jx-line: #dcdfe3;         /* 细分隔线 */
+  --jx-line-strong: #b8bcc2;
+  --jx-code-bg: #f4f5f6;
+  --jx-table-head: #f3f4f5;
+  --jx-highlight: #fdf3b6;
+}
+
+/* ---------- 全局重置与基础 ---------- */
+
+html, body.jx-export {
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* 关键：Obsidian 的 app.css 给 body 设了 overflow:hidden/固定高度
+     （应用本体不滚动），打印时会裁掉第 1 页之后的一切 */
+  overflow: visible !important;
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0 !important;
+}
+
+.jx-export {
+  font-family: var(--jx-sans);
+  color: var(--jx-body-text);
+  font-size: 10.5pt;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+}
+
+/* 排版基线同时下放到内容容器：
+   收集来的 app.css/snippet 会直接命中 .markdown-rendered（0-1-0），
+   这里用 .jx-export .jx-content（0-2-0）确保预设始终拥有最终控制权 */
+.jx-export,
+.jx-export .jx-content {
+  font-family: var(--jx-sans);
+  font-size: 10.5pt;
+  line-height: 1.85;
+  letter-spacing: 0.02em;
+  color: var(--jx-body-text);
+  font-weight: 400; /* 基线常规字重；预览快照预设会改回 700 */
+}
+
+/* 中和预览专用效果（毛玻璃、卡片底、可读行宽限制等），
+   它们在纸面上没有意义甚至有害 */
+.jx-export .markdown-preview-view,
+.jx-export .markdown-rendered,
+.jx-export .markdown-source-view {
+  background: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.jx-export .markdown-preview-sizer {
+  max-width: none !important;
+  width: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.jx-export .markdown-preview-section {
+  --file-line-width: auto !important;
+  max-width: none !important;
+  width: auto !important;
+}
+
+/* 属性面板（frontmatter 的 UI 呈现）不进入正文；
+   元数据会以封面/页眉形式呈现 */
+.jx-export .metadata-container,
+.jx-export .frontmatter {
+  display: none !important;
+}
+
+/* ---------- 正文元素 ---------- */
+
+.jx-content > *:first-child { margin-top: 0 !important; }
+.jx-content > *:last-child { margin-bottom: 0 !important; }
+
+.jx-content p {
+  margin: 0 0 0.9em;
+  orphans: 3;
+  widows: 3;
+}
+
+.jx-content h1,
+.jx-content h2,
+.jx-content h3,
+.jx-content h4,
+.jx-content h5,
+.jx-content h6 {
+  font-family: var(--jx-sans);
+  color: var(--jx-ink);
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  break-after: avoid-page;
+  page-break-after: avoid;
+  text-align: left;
+}
+
+.jx-content h1 { font-size: 1.65em; margin: 1.6em 0 0.8em; }
+.jx-content h2 { font-size: 1.35em; margin: 1.7em 0 0.7em; }
+.jx-content h3 { font-size: 1.15em; margin: 1.4em 0 0.6em; font-weight: 700; }
+.jx-content h4 { font-size: 1.02em; margin: 1.2em 0 0.5em; font-weight: 700; }
+.jx-content h5,
+.jx-content h6 { font-size: 0.95em; margin: 1em 0 0.4em; font-weight: 700; color: #55585d; }
+
+/* 标题下加一丝呼吸感的细线（仅 h1/h2） */
+.jx-content h1 { border-bottom: 0.75pt solid var(--jx-line); padding-bottom: 0.35em; }
+.jx-content h2 { padding-bottom: 0.2em; }
+
+/* 链接：内链去链接化（纸面上不可点），外链保留 */
+.jx-content a.internal-link,
+.jx-content a.unresolved {
+  color: inherit;
+  text-decoration: none;
+}
+.jx-content a.external-link {
+  color: #2456a6;
+  text-decoration: none;
+  word-break: break-all;
+}
+.jx-content a.external-link::after {
+  content: "";
+  /* 保留 Obsidian 的外链箭头行为，去掉下划线 */
+}
+
+/* ---------- 列表 ---------- */
+
+.jx-content ul,
+.jx-content ol {
+  margin: 0.4em 0 1em;
+  padding-left: 1.6em;
+}
+.jx-content li {
+  margin: 0.25em 0;
+  orphans: 2;
+  widows: 2;
+}
+.jx-content li::marker {
+  color: #6f7378;
+}
+.jx-content ul ul,
+.jx-content ol ol,
+.jx-content ul ol,
+.jx-content ol ul {
+  margin-bottom: 0;
+}
+
+/* 任务清单：自绘复选框，打印稳定 */
+.jx-content .task-list-item {
+  list-style: none;
+}
+.jx-content .task-list-item .task-list-item-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 0.95em;
+  height: 0.95em;
+  border: 1.2px solid #9aa0a6;
+  border-radius: 3px;
+  vertical-align: -0.1em;
+  margin-right: 0.45em;
+  position: relative;
+  background: #fff;
+}
+.jx-content .task-list-item .task-list-item-checkbox:checked {
+  background: #3f444c url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M3.5 8.5l3 3 6-7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/></svg>") center / 82% no-repeat;
+  border-color: #3f444c;
+}
+.jx-content .task-list-item.is-checked {
+  color: var(--jx-muted);
+}
+
+/* ---------- 表格 ---------- */
+
+.jx-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.2em 0;
+  font-size: 0.9em;
+  line-height: 1.55;
+  break-inside: auto;
+}
+.jx-content table thead {
+  display: table-header-group; /* 跨页时自动重复表头 */
+}
+.jx-content tr {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.jx-content th,
+.jx-content td {
+  border: 0.75pt solid var(--jx-line);
+  padding: 6px 12px;
+  text-align: left;
+  vertical-align: top;
+}
+.jx-content th {
+  background: var(--jx-table-head);
+  color: var(--jx-ink);
+  font-weight: 700;
+}
+.jx-content td:first-child {
+  font-weight: 600;
+  color: var(--jx-ink);
+}
+
+/* ---------- 代码 ---------- */
+
+.jx-content pre {
+  font-family: var(--jx-mono);
+  font-size: 0.84em;
+  line-height: 1.6;
+  background: var(--jx-code-bg);
+  border: 0.75pt solid var(--jx-line);
+  border-radius: 6px;
+  padding: 10px 14px;
+  margin: 1.1em 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  color: #33373d;
+}
+.jx-content code {
+  font-family: var(--jx-mono);
+  font-size: 0.86em;
+  background: var(--jx-code-bg);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+  color: #40444b;
+}
+.jx-content pre code {
+  background: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+/* ---------- 引用块 ---------- */
+
+.jx-content blockquote {
+  margin: 1.1em 0;
+  padding: 0.15em 1.1em;
+  border-left: 2.5pt solid var(--jx-line-strong);
+  color: #676a6f;
+  background: transparent;
+  font-style: normal;
+}
+.jx-content blockquote p { margin: 0.5em 0; }
+
+/* ---------- Callout（Obsidian 结构） ---------- */
+
+.jx-content .callout {
+  --callout-color: 109, 112, 114;
+  margin: 1.2em 0;
+  padding: 0.7em 1em;
+  border-radius: 8px;
+  background: rgba(var(--callout-color), 0.07);
+  border: 0.75pt solid rgba(var(--callout-color), 0.25);
+  border-left: 2.5pt solid rgba(var(--callout-color), 0.75);
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+.jx-content .callout-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0;
+  font-size: 0.98em;
+  color: rgba(var(--callout-color), 1);
+  font-weight: 700;
+}
+.jx-content .callout-icon .svg-icon {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.2px;
+}
+.jx-content .callout-title-inner {
+  flex: 1;
+  font-weight: 700;
+}
+.jx-content .callout-content {
+  padding: 0.2em 0 0;
+  background: transparent;
+  border: none;
+}
+.jx-content .callout-content > *:last-child { margin-bottom: 0; }
+.jx-content .callout.is-collapsible .callout-fold {
+  display: none;
+}
+
+/* ---------- 图片与媒体 ---------- */
+
+.jx-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.3em auto;
+  border-radius: 4px;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+}
+.jx-content .image-embed img,
+.jx-content p .internal-embed img {
+  margin: 1.3em auto;
+}
+.jx-content svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mermaid 图 */
+.jx-content .mermaid,
+.jx-content .mermaid svg {
+  max-width: 100%;
+  break-inside: avoid-page;
+  page-break-inside: avoid;
+  margin: 1.2em auto;
+}
+
+/* ---------- 其他行内元素 ---------- */
+
+.jx-content mark {
+  background: var(--jx-highlight);
+  color: inherit;
+  padding: 0.05em 0.15em;
+  border-radius: 2px;
+}
+
+.jx-content hr {
+  border: none;
+  border-top: 0.75pt solid var(--jx-line);
+  margin: 2em 0;
+}
+
+.jx-content .tag {
+  display: inline-block;
+  font-size: 0.8em;
+  color: #5f646b;
+  background: #f0f1f3;
+  border: 0.75pt solid var(--jx-line);
+  border-radius: 999px;
+  padding: 0.08em 0.7em;
+  text-decoration: none;
+  line-height: 1.5;
+}
+
+.jx-content em { font-style: italic; }
+.jx-content strong { font-weight: 900; }
+
+.jx-content .footnotes {
+  margin-top: 2.2em;
+  padding-top: 0.8em;
+  border-top: 0.75pt solid var(--jx-line);
+  font-size: 0.85em;
+  color: #5f636a;
+}
+.jx-content .footnote-backref { text-decoration: none; }
+
+.jx-content mjx-container {
+  font-size: 96% !important;
+}
+.jx-content mjx-container[width="full"] {
+  break-inside: avoid-page;
+}
+
+.jx-content .dataview,
+.jx-content .dataview-container {
+  break-inside: auto;
+}
+.jx-content .block-language-dataview {
+  break-inside: auto;
+}
+
+/* ============================================================
+   封面骨架（report 预设使用；结构与布局在此，气质在预设里）
+   ============================================================ */
+
+.jx-cover {
+  page: jx-cover;
+  break-after: page;
+  page-break-after: always;
+  height: 297mm;
+  box-sizing: border-box;
+  padding: 30mm 26mm 24mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.jx-cover-top {
+  display: flex;
+  flex-direction: column;
+  gap: 6mm;
+}
+.jx-cover-bar {
+  width: 30mm;
+  height: 1.6mm;
+  background: #26292e;
+}
+.jx-cover-kicker {
+  font-size: 9.5pt;
+  letter-spacing: 0.32em;
+  color: #8a8d92;
+  font-weight: 500;
+}
+
+.jx-cover-mid {
+  margin-top: 18mm;
+}
+.jx-cover-title {
+  font-family: var(--jx-heavy);
+  font-weight: 900;
+  font-size: 27pt;
+  line-height: 1.4;
+  color: #26292e;
+  margin: 0 0 6mm;
+  letter-spacing: 0.03em;
+}
+.jx-cover-sub {
+  font-size: 12pt;
+  color: #6f7378;
+  margin: 0;
+  line-height: 1.8;
+  max-width: 128mm;
+}
+
+.jx-cover-meta {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+.jx-cover-authorline {
+  font-size: 11pt;
+  color: #3a3d42;
+  font-weight: 700;
+}
+.jx-cover-date {
+  font-size: 9.5pt;
+  color: #8a8d92;
+  margin-top: 1.5mm;
+  letter-spacing: 0.08em;
+}
+.jx-cover-brand {
+  font-size: 9pt;
+  letter-spacing: 0.28em;
+  color: #b8bcc2;
+  font-weight: 500;
+}
+
+/* ============================================================
+   目录骨架
+   ============================================================ */
+
+.jx-toc {
+  page: jx-toc;
+  break-after: page;
+  page-break-after: always;
+}
+.jx-toc-title {
+  font-family: var(--jx-heavy);
+  font-size: 16pt;
+  font-weight: 900;
+  color: #26292e;
+  margin: 2mm 0 8mm;
+  letter-spacing: 0.12em;
+}
+.jx-toc-item {
+  margin: 0;
+  line-height: 2.1;
+}
+.jx-toc-item a {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5em;
+  text-decoration: none;
+  color: inherit;
+}
+/* 页码由 Paged.js 的 target-counter 写入 ::after（flex 末项） */
+.jx-toc-item a::after {
+  content: target-counter(attr(href), page);
+  color: #8a8d92;
+  font-weight: 400;
+}
+/* 点线引导（DOM 内的 span，比 leader() 兼容性好） */
+.jx-toc-dots {
+  flex: 1;
+  border-bottom: 1px dotted #c5c8cc;
+  transform: translateY(-0.3em);
+  min-width: 2em;
+}
+.jx-toc-item.l1 {
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #2c2f34;
+  margin-top: 1.2em;
+}
+.jx-toc-item.l2 {
+  font-size: 10pt;
+  padding-left: 2em;
+  color: #4a4d52;
+}
+.jx-toc-item.l3 {
+  font-size: 9.5pt;
+  padding-left: 4em;
+  color: #77797e;
+}
+
+/* ============================================================
+   分页行为总控
+   ============================================================ */
+
+.jx-content h1,
+.jx-content h2,
+.jx-content h3,
+.jx-content h4,
+.jx-content h5,
+.jx-content h6 {
+  break-after: avoid-page;
+  page-break-after: avoid;
+}
+
+.jx-content table,
+.jx-content figure,
+.jx-content .callout,
+.jx-content blockquote {
+  break-before: auto;
+}
+
+/* Paged.js 页面容器基础 */
+.pagedjs_page {
+  background: #ffffff;
+}

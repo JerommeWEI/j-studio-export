@@ -1,0 +1,122 @@
+/* ============================================================
+   预设 ① · 正式报告 (report.css)
+   封面 + 目录 + 页眉页码，A4 正式文档气质。
+   正文默认思源黑体（与你的预览美学同源）；
+   如需衬线正文，把 .jx-export 的 font-family 换成
+   var(--jx-serif) 即可（华文中宋）。
+   ============================================================ */
+
+@page {
+  size: A4;
+  margin: 24mm 20mm 22mm 20mm;
+
+  @top-center {
+    content: string(doctitle);
+    font-family: "思源黑体", "Microsoft YaHei", sans-serif;
+    font-size: 8pt;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    color: #9a9da2;
+    vertical-align: bottom;
+    padding-bottom: 4mm;
+    margin: 0 20mm;
+    border-bottom: 0.5pt solid #e3e5e8;
+  }
+
+  @bottom-center {
+    content: counter(page);
+    font-family: "思源黑体", "Microsoft YaHei", sans-serif;
+    font-size: 9pt;
+    color: #6f7378;
+    vertical-align: top;
+    padding-top: 3mm;
+  }
+}
+
+/* 封面整页无页边距、无页眉页脚 */
+@page jx-cover {
+  margin: 0;
+  @top-center { content: none; border: none; }
+  @bottom-center { content: none; }
+}
+
+/* 目录页：不显示页眉与页码（正文从 1 重新计数） */
+@page jx-toc {
+  @top-center { content: none; border: none; }
+  @bottom-center { content: none; }
+}
+
+/* 正文从第 1 页计数（封面、目录不计） */
+.jx-body {
+  counter-reset: page 1;
+}
+
+/* ---------- 字体与版心 ---------- */
+
+.jx-export,
+.jx-export .jx-content {
+  font-size: 10.5pt;
+  line-height: 1.9;
+  letter-spacing: 0.02em;
+  color: #3a3d42;
+  font-weight: 400;
+}
+
+.jx-content {
+  text-align: left; /* 左对齐：中英混排两端对齐会把行距拉稀，很丑 */
+}
+
+/* 封面标题进入页眉 string */
+.jx-cover-title {
+  string-set: doctitle content(text);
+}
+
+/* ---------- 章节感：一级标题起新页 ---------- */
+
+.jx-content h1 {
+  break-before: page;
+  page-break-before: always;
+  margin-top: 0;
+}
+
+/* 全文第一个 h1（未隐藏时）不额外起新页 */
+.jx-content h1:first-child,
+.jx-content > h1.jx-first-heading {
+  break-before: avoid;
+  page-break-before: avoid;
+}
+
+/* 与文档标题重复的首个 H1 由 main.js 标记隐藏 */
+.jx-content .jx-title-hidden {
+  display: none !important;
+}
+
+/* ---------- 标题层级微调 ---------- */
+
+.jx-content h1 {
+  font-size: 1.6em;
+  margin-bottom: 0.9em;
+  padding-bottom: 0.4em;
+  border-bottom: 1.5pt solid #26292e;
+}
+.jx-content h2 {
+  font-size: 1.3em;
+  margin-top: 1.9em;
+}
+.jx-content h3 {
+  font-size: 1.12em;
+  margin-top: 1.6em;
+}
+
+/* ---------- 表格与代码的正式文档比例 ---------- */
+
+.jx-content table { font-size: 0.88em; }
+.jx-content pre { font-size: 0.82em; }
+
+/* ---------- 多页文档的细节 ---------- */
+
+.jx-content p { margin-bottom: 0.95em; }
+
+.jx-content blockquote {
+  border-left-color: #b8bcc2;
+}
