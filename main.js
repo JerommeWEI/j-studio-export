@@ -263,14 +263,40 @@ class JXExportModal extends Modal {
   onOpen() {
     this.contentEl.empty();
     this.contentEl.addClass('jx-modal');
-    this.contentEl.createEl('div', {
+
+    /* 只约束 .modal 本体；containerEl 是全屏遮罩，动它会破坏布局 */
+    this.modalEl.style.maxHeight = 'min(90vh, 800px)';
+    this.modalEl.style.height = 'auto';
+    this.modalEl.style.overflowX = 'hidden';
+    this.modalEl.style.overflowY = 'auto';
+    this.modalEl.addClass('jx-modal-root');
+
+    const head = this.contentEl.createEl('div', 'jx-modal-head');
+    const headText = head.createEl('div', 'jx-modal-head-text');
+    headText.createEl('div', {
       text: 'PDF-export · 精美导出',
       cls: 'jx-modal-title',
     });
-    this.contentEl.createEl('div', {
+    headText.createEl('div', {
       text: '以 Paged.js 分页引擎输出，页码、页眉、目录由排版引擎生成。',
       cls: 'jx-modal-sub',
     });
+
+    /* 操作按钮放顶部，保证任何布局下都可见 */
+    const actions = head.createEl('div', 'jx-modal-actions');
+    const btnPdf = actions.createEl('button', {
+      text: '导出 PDF',
+      cls: 'mod-cta',
+    });
+    btnPdf.onclick = () => {
+      this.close();
+      this.plugin.runExport('pdf', this.s);
+    };
+    const btnHtml = actions.createEl('button', { text: '导出 HTML' });
+    btnHtml.onclick = () => {
+      this.close();
+      this.plugin.runExport('html', this.s);
+    };
 
     /* 预设卡片 */
     const grid = this.contentEl.createEl('div', 'jx-preset-grid');
@@ -289,9 +315,11 @@ class JXExportModal extends Modal {
       };
     }
 
-    /* 元素开关 */
+    /* 元素开关：紧凑网格，避免纵向过高被裁切 */
+    const togglesEl = this.contentEl.createEl('div', 'jx-toggle-grid');
     const mk = (key, name, desc) => {
-      const st = new Setting(this.contentEl)
+      const cell = togglesEl.createEl('div', 'jx-toggle-cell');
+      const st = new Setting(cell)
         .setName(name)
         .setDesc(desc)
         .addToggle((tg) => {
@@ -302,28 +330,12 @@ class JXExportModal extends Modal {
         });
       return st;
     };
-    mk('cover', '封面页', '标题 / 副标题 / 作者 / 日期的正式封面（仅"正式报告"）');
-    mk('toc', '目录页', '自动生成目录，含真实页码（仅"正式报告"）');
-    mk('header', '页眉', '页眉显示文档标题与细线（仅"正式报告"）');
-    mk('pageNumbers', '页码', '页脚居中显示页码');
+    mk('cover', '封面页', '正式报告封面');
+    mk('toc', '目录页', '含真实页码');
+    mk('header', '页眉', '标题与细线');
+    mk('pageNumbers', '页码', '页脚居中');
 
     this._refreshToggles();
-
-    /* 操作按钮 */
-    const actions = this.contentEl.createEl('div', 'jx-modal-actions');
-    const btnPdf = actions.createEl('button', {
-      text: '导出 PDF',
-      cls: 'mod-cta',
-    });
-    btnPdf.onclick = () => {
-      this.close();
-      this.plugin.runExport('pdf', this.s);
-    };
-    const btnHtml = actions.createEl('button', { text: '导出 HTML（分享/调试）' });
-    btnHtml.onclick = () => {
-      this.close();
-      this.plugin.runExport('html', this.s);
-    };
   }
 
   _refreshToggles() {

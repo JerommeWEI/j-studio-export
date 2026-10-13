@@ -1,5 +1,29 @@
 /* PDF-export · 界面样式（导出弹窗与设置页） */
 
+/* 强制弹窗可滚，避免主题/默认样式裁切内容 */
+.modal.jx-modal-root {
+  max-height: min(90vh, 800px) !important;
+  height: auto !important;
+  overflow: auto !important;
+}
+
+.jx-modal {
+  padding-bottom: 8px;
+}
+
+.jx-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.jx-modal-head-text {
+  flex: 1;
+  min-width: 0;
+}
+
 .jx-modal-title {
   font-size: 1.1em;
   font-weight: 800;
@@ -9,13 +33,13 @@
 .jx-modal-sub {
   color: var(--text-muted);
   font-size: 0.85em;
-  margin-bottom: 14px;
+  margin-bottom: 0;
 }
 
 .jx-preset-grid {
   display: flex;
   gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .jx-preset-card {
@@ -47,15 +71,76 @@
   line-height: 1.4;
 }
 
-.jx-modal .setting-item.is-disabled {
+/* 开关选项：整行卡片底色，文字最左 / 开关最右 */
+.jx-toggle-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.jx-toggle-cell {
+  background: var(--background-secondary);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 10px;
+  padding: 0 14px;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.jx-toggle-cell:hover {
+  border-color: var(--text-faint);
+}
+
+.jx-toggle-cell .setting-item {
+  padding: 10px 0;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.jx-toggle-cell .setting-item-info {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+.jx-toggle-cell .setting-item-name {
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--text-normal);
+}
+
+.jx-toggle-cell .setting-item-description {
+  font-size: 0.8em;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.jx-toggle-cell .setting-item-control {
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* 开关始终贴卡片右侧 */
+.jx-toggle-cell .setting-item-control .checkbox-container {
+  margin-left: auto;
+}
+
+.jx-modal .setting-item.is-disabled,
+.jx-toggle-cell.is-disabled {
   opacity: 0.45;
 }
 
+/* 顶部操作区 */
 .jx-modal-actions {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
-  margin-top: 16px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .jx-css-editor {

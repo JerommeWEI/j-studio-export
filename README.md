@@ -1,122 +1,118 @@
-# PDF-export · 精美 PDF 导出（Obsidian 插件）
+# PDF-export · 精美 PDF 导出
 
-把 Obsidian 笔记导出为**带封面、目录、页眉页码、优雅分页**的 A4 PDF，
-解决内置导出的"分页破碎、排版走样、没有正式文档感"三大问题。
+> 仓库：https://github.com/JerommeWEI/j-studio-export  
+> 版本：**v0.2.0** · 作者：**JerommeWEI**
 
-Export your Obsidian notes to beautifully typeset A4 PDFs — cover page,
-table of contents with real page numbers, headers and page numbers —
-powered by the Paged.js pagination engine.
+为 J-Studio 仓库定制的 Obsidian 导出插件：把笔记渲染成**带封面、目录、页眉页码、优雅分页**的 A4 PDF，解决内置导出的"分页破碎、排版走样、没有正式文档感"三大问题。
 
-## 功能特性
+## 更新记录
 
-- **三套排版预设**
-  | 预设 | 气质 | 用途 |
-  |------|------|------|
-  | **正式报告** | 封面 + 目录（真实页码）+ 页眉页码，章节起新页 | 发同事/领导、归档 |
-  | **预览快照** | 还原阅读视图的纸面翻译版 | 像预览一样留存 |
-  | **紧凑打印** | 小字号密排、窄边距 | 打印纸质、讲义 |
-- **忠实渲染**：用 Obsidian 自己的渲染管线，Dataview / Mermaid /
-  Excalidraw / 数学公式 / 高亮 / Callout 都以真实渲染结果进入 PDF
-- **图片自动内嵌**：本地附件（含 `![[wiki 嵌入]]` 与标准 Markdown 图片）
-  自动转 base64 嵌入，离线可印
-- **自适应任意仓库**：不假设仓库路径、附件位置或 Obsidian 链接格式；
-  插件所需的排版预设与分页引擎已内嵌于 `main.js`，商店安装开箱即用
-- **封面元数据**：自动读取 frontmatter 的 `title / subtitle / author /
-  date / kicker`（也认中文键 `标题 / 副标题 / 作者 / 日期 / 栏目`），
-  缺省用文件名、所在文件夹路径、当天日期
-- **优雅降级**：环境不允许静默打印时，自动改导自包含 HTML 并给出
-  浏览器打印指引
+### v0.2.0
 
-## 安装
+- **导出弹窗按钮修复**：部分主题/布局下底部按钮被裁切不可见；现将「导出 PDF / 导出 HTML」固定在弹窗顶部，任何情况下都可点击
+- **弹窗可滚动**：强制 `.modal` 高度上限并允许滚动，避免内容被截断
+- **开关选项重排**：封面页/目录页/页眉/页码改为整行卡片——底色划分区域，文字靠左、开关靠右
 
-### 社区插件商店（推荐）
+### v0.1.0
 
-设置 → 第三方插件 → 浏览，搜索 **PDF-export**，安装并启用。
+- 首个版本：三套预设、Paged.js 分页、封面/目录/页眉页码
 
-### 手动安装
+## 启用方法
 
-1. 从 [Releases](../../releases) 下载 `main.js`、`manifest.json`、`styles.css`
-2. 放入 `<你的仓库>/.obsidian/plugins/j-studio-export/`
-3. 重启 Obsidian，在设置 → 第三方插件中启用 **PDF-export**
-
-## 使用
-
-- 点击左侧栏 📥 图标，或 `Ctrl+P` 运行命令：
+1. 打开 Obsidian → 设置 → 第三方插件（Community plugins）
+2. 在已安装列表中找到 **PDF-export**，打开开关（若列表没有，先重启 Obsidian）
+3. 左侧栏会出现 📄 导出图标，或用 Ctrl+P 运行命令：
 
 | 命令 | 作用 |
 |------|------|
 | `导出当前笔记为精美 PDF` | 弹窗选择预设与元素后导出 |
-| `快速导出（跳过弹窗，使用默认预设）` | 一键按设置导出 |
+| `快速导出（跳过弹窗）` | 直接用设置里的默认预设 |
 
-### 设置项
+## 三套预设
 
-默认预设 / 封面署名（author）/ 封面品牌文字（brand）/ 输出位置
-（每次询问或直接写入笔记同目录）/ 导出后自动打开 / 自定义 CSS
-（优先级最高的排版覆盖）。
+| 预设 | 气质 | 用途 |
+|------|------|------|
+| **正式报告** | 封面 + 目录（真实页码）+ 页眉页码，章节起新页 | 发同事/领导、归档 |
+| **预览快照** | 还原 quiet-notes 阅读视图：加粗正文、行距 2.0 | 像预览一样留存 |
+| **紧凑打印** | 9.5pt 密排、窄边距 | 打印纸质、讲义 |
+
+封面元数据来源：frontmatter 的 `title / subtitle / subject / author / date / kicker`，缺省用文件名、文件夹路径、今天日期。与文档标题相同的首个 H1 会自动隐藏（避免封面+正文重复）。
 
 ## 工作原理
 
 ```
-笔记 → Obsidian 渲染器（插件生态真实渲染）
+笔记 → Obsidian 渲染器（Dataview/Mermaid/Excalidraw/数学都真实渲染）
      → 图片内嵌 base64 + 收集仓库全部 CSS
-     → CSS 消毒（去掉 Paged.js 无法处理的 :is() 内逗号选择器、
-       剥离 @media print）
+     → CSS 消毒（css-sanitize.js：去掉 Paged.js 无法处理的
+       :is() 内逗号选择器、剥离 @media print）
      → 消毒后的样式仅屏幕态注入（@media screen）：
        Paged.js 在屏幕态用真实样式做分页测量（保真），
-       打印态只走预设排版 CSS（稳定）
+       打印态只走 presets/ 的排版 CSS（稳定，规避 app.css
+       的 html/body height:100% 等打印态怪癖）
      → Paged.js 分页引擎（页码/页眉/目录页码由它生成）
      → 隐藏窗口 Chromium 静默打印 printToPDF
 ```
 
-## 开发
+无构建步骤：`main.js` 是纯 JavaScript，改完在 Obsidian 里关闭再开启插件即可生效。
 
-无构建步骤，`main.js` 是纯 JavaScript：
-
-```
-manifest.json          # 插件清单
-main.js                # 导出管线（含 base64 内嵌资产）
-styles.css             # 弹窗/设置界面样式
-presets/               # 排版预设（开发态真实文件，改 CSS 即改即测）
-vendor/paged.polyfill.js  # Paged.js 0.4.3 分页引擎
-tools/embed-assets.js  # 把 presets + vendor 以 base64 内嵌进 main.js
-```
-
-**发版前必跑**：
-
-```bash
-node tools/embed-assets.js   # 刷新 main.js 里的内嵌资产
-```
-
-> 商店/手动安装只会有 `main.js / manifest.json / styles.css` 三个文件，
-> 因此 presets 与分页引擎必须内嵌于 `main.js` 兜底；
-> 开发态则始终优先读取 `presets/`、`vendor/` 真实文件，方便迭代排版。
-
-**调排版的两条军规**（保持屏幕/打印态度量一致）：
-
+**改 CSS 时的两条军规**（保持屏幕/打印态度量一致）：
 1. 影响度量的排版规则（字号、行距、间距）写在 `presets/*.css`，
    并用 `.jx-export .jx-content`（优先级 0-2-0）压过 app.css
    对 `.markdown-rendered` 的直接规则
-2. 排版控制不要依赖 `@media print`——打印态只有预设生效
+2. 排版控制不要依赖 `@media print`——打印态只有 presets 生效
 
-### 已知陷阱（血泪记录）
+## 已知陷阱（血泪记录）
 
 - Paged.js **必须用 0.4.3**（0.5.0-beta 的 margin box 与 break 是坏的）
 - Paged.js 按逗号切选择器组时不识别括号：`:is(p,pre) + :is(h1,h2)`
-  会被切成非法选择器 → 整个分页失败（产出 0 页）——收集的 CSS 必须
-  先过消毒器
+  被切成非法选择器 → **整个分页失败（产出 0 页）**——这就是
+  css-sanitize.js 存在的原因，收集的 CSS 必须过它
 - `leader()` 不被支持（整条声明被丢弃）；目录点线用 flex + 点线 span
 - app.css 的 `html, body { height: 100% }` 在打印态解析为 0px，
   会把第 1 页之后的内容全部裁掉——收集样式只能屏幕态注入
-- Obsidian 渲染出的 `app://` 图片链接，host 之后接的是 **URL 编码的
-  绝对路径**（不同版本格式不同），解析时必须先判断绝对/相对再拼路径
+- margin box 内容生成在 `.pagedjs_margin-content::after` 伪元素里，
+  调试时查 textContent 会误判为空
+
+## 如何迭代排版（最重要的一节）
+
+**日常调样式**：编辑 `presets/` 下的 CSS，重启插件（或重启 Obsidian）后导出即见效果。
+所有预设共享 `_base.css`（元素样式、分页保护、封面目录骨架），每套预设只做覆盖。
+也可以不改文件，直接在 设置 → 自定义 CSS 里写覆盖规则（优先级最高）。
+
+**本地验证回路**（不打开 Obsidian 也能测排版）：
+
+```
+cd .obsidian/plugins/j-studio-export/dev-test
+node build-test.js report     # 用模拟内容生成 test-report.html
+node render.js report         # 本机 Chrome 渲染 → PDF + 截图
+node verify.js report         # DOM/像素级断言（页码、页眉、溢出…）
+node pdf-check.js report      # PDF 文本内容断言
+```
+
+## 文件结构
+
+```
+j-studio-export/
+├── manifest.json        # 插件清单
+├── main.js              # 导出管线（纯 JS）
+├── styles.css           # 弹窗/设置界面样式
+├── vendor/paged.polyfill.js   # Paged.js 0.4.3（分页引擎）
+├── presets/             # ← 排版气质都在这里
+│   ├── _base.css
+│   ├── report.css
+│   ├── snapshot.css
+│   └── compact.css
+└── dev-test/            # 本地测试回路（node 依赖已装好）
+```
 
 ## 已知边界
 
-- 音视频 / iframe 嵌入不会进入 PDF（会被隐藏）
-- 复制 PDF 文本时个别汉字可能变成部首变体（Chromium + 思源黑体 CMap
-  的已知怪癖，渲染不受影响）
-- 仅支持桌面端（`isDesktopOnly`）
+- 代码块等宽字体导出时用 Cascadia Code / Consolas（预览里的 3DS Fonticon 是图标字体，不适合代码）
+- 毛玻璃 frosted 效果在纸上不存在，快照预设已翻译成等价的纸面排版
+- 音视频/iframe 嵌入不会进入 PDF（会被隐藏）
+- 复制 PDF 文本时个别汉字可能变成部首变体（Chromium + 思源黑体 CMap 的已知怪癖，渲染不受影响）
+- 若环境不允许静默打印，会自动降级为"导出自包含 HTML + 浏览器 Ctrl+P 指引"
 
-## 许可
+## 设置项
 
-MIT（插件本体）；内置 Paged.js 遵循其原有 MIT 许可。
+默认预设 / 作者名（封面署名）/ 输出位置（每次询问或直接写笔记同目录）/ 导出后自动打开 / 自定义 CSS。
