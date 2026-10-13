@@ -18,7 +18,8 @@
     letter-spacing: 0.22em;
     color: #9a9da2;
     vertical-align: bottom;
-    padding-bottom: 4mm;
+    /* 页眉贴底对齐，padding-bottom 拉开与正文首行的间隙 */
+    padding-bottom: 7mm;
     margin: 0 20mm;
     border-bottom: 0.5pt solid #e3e5e8;
   }
@@ -91,21 +92,32 @@
   display: none !important;
 }
 
-/* ---------- 标题层级微调 ---------- */
+/* ---------- 标题层级微调 ----------
+   页首间隙用 padding-top，不用 margin-top：
+   分页点上的 margin-top 会被折叠，导致第 2 页起标题贴页眉；
+   padding 不折叠，正文各页「页眉 → 首行」间距才能统一。
+   页中段落间距仍由 margin-top 补足，与原先总间距接近。 */
 
 .jx-content h1 {
   font-size: 1.6em;
-  margin-bottom: 0.9em;
+  margin: 0 0 0.9em;
+  padding-top: 1.15em;
   padding-bottom: 0.4em;
   border-bottom: 1.5pt solid #26292e;
 }
 .jx-content h2 {
   font-size: 1.3em;
-  margin-top: 1.9em;
+  margin: 0.75em 0 0.7em;
+  padding-top: 1.15em;
 }
 .jx-content h3 {
   font-size: 1.12em;
-  margin-top: 1.6em;
+  margin: 0.45em 0 0.6em;
+  padding-top: 1.15em;
+}
+.jx-content h4 {
+  margin: 0.35em 0 0.5em;
+  padding-top: 1.15em;
 }
 
 /* ---------- 表格与代码的正式文档比例 ---------- */
@@ -115,7 +127,34 @@
 
 /* ---------- 多页文档的细节 ---------- */
 
-.jx-content p { margin-bottom: 0.95em; }
+/* 正文块的「页首保证」：与标题同一间隙。
+   只给顶层块 padding-top（分页不折叠），margin-top 归零；
+   块间距改走 margin-bottom / padding-top，避免页中被撑爆。 */
+.jx-content > p,
+.jx-content > ul,
+.jx-content > ol,
+.jx-content > blockquote,
+.jx-content > pre,
+.jx-content > table,
+.jx-content > hr {
+  padding-top: 1.15em;
+  margin-top: 0;
+}
+
+.jx-content p {
+  margin: 0 0 0.35em;
+}
+
+.jx-content > ul,
+.jx-content > ol {
+  margin-bottom: 0.45em;
+}
+
+.jx-content > blockquote,
+.jx-content > pre,
+.jx-content > table {
+  margin-bottom: 0.85em;
+}
 
 .jx-content blockquote {
   border-left-color: #b8bcc2;
