@@ -1,10 +1,12 @@
 /* PDF-export · 界面样式（导出弹窗与设置页） */
 
 /* 强制弹窗可滚，避免主题/默认样式裁切内容 */
-.modal.jx-modal-root {
-  max-height: min(90vh, 800px) !important;
-  height: auto !important;
-  overflow: auto !important;
+.modal.jx-modal-root,
+.modal-content.jx-modal {
+  max-height: min(90vh, 800px);
+  height: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .jx-modal {

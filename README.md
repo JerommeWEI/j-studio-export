@@ -87,6 +87,12 @@ kicker: 页眉小字（可选）
 
 ## 版本记录
 
+### v0.4.0
+
+- **去掉导出里的复制按钮**：代码块上的 Obsidian「复制」图标不再进入 PDF（DOM 剥离 + CSS 兜底）
+- **页首间隙真正统一**：间距改加在每一页内容区（`pagedjs_page_content`），代码块/段落/标题落在页首距离一致，且**不会在灰底代码块内部多出空白条**
+- 社区审核告警清理：标准 MIT LICENSE、manifest 描述句末标点、减少无必要 `!important`
+
 ### v0.3.0
 
 - **正文页首间隙统一**：分页点 `margin-top` 会被折叠，导致第 2 页起内容贴页眉；改为 `padding-top` 保证
@@ -172,8 +178,14 @@ node pdf-check.js report     # PDF 文本断言
 - 复制 PDF 文本时个别汉字可能成部首变体（Chromium + 思源黑体 CMap 已知怪癖，渲染正常）
 - 无法静默打印时自动降级为「导出自包含 HTML + 浏览器 Ctrl+P 指引」
 
+### 权限说明（给审核与用户）
+
+导出需要在**本机写入 PDF / HTML 文件**，因此使用 Node `fs` 写盘与读取 `presets/`、`vendor/` 静态资源；笔记内容读取走 Obsidian `vault.read` API。不会上传网络，不收集遥测。
+
 ---
 
 ## License
 
-见仓库 [LICENSE](LICENSE)。
+[MIT](LICENSE)。
+
+内置 [Paged.js](https://gitlab.coko.foundation/pagedjs/pagedjs) v0.4.3，其自身亦为 MIT。

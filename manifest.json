@@ -1,9 +1,9 @@
 {
   "id": "j-studio-export",
   "name": "PDF-export",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "minAppVersion": "1.4.0",
-  "description": "精美 PDF 导出：Paged.js 分页引擎，封面、目录、页眉页码，三套排版预设（正式报告 / 预览快照 / 紧凑打印）。",
+  "description": "精美 PDF 导出：Paged.js 分页引擎，封面、目录、页眉页码，三套排版预设（正式报告 / 预览快照 / 紧凑打印）!",
   "author": "JerommeWEI",
   "isDesktopOnly": true
 }

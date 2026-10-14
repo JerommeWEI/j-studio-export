@@ -21,6 +21,8 @@
   --jx-code-bg: #f4f5f6;
   --jx-table-head: #f3f4f5;
   --jx-highlight: #fdf3b6;
+  /* 页眉 → 页首正文的统一间隙（所有预设共用） */
+  --jx-page-gap: 1.15em;
 }
 
 /* ---------- 全局重置与基础 ---------- */
@@ -61,7 +63,9 @@ html, body.jx-export {
 }
 
 /* 中和预览专用效果（毛玻璃、卡片底、可读行宽限制等），
-   它们在纸面上没有意义甚至有害 */
+   它们在纸面上没有意义甚至有害。
+   这里的 !important 用于压过收集进来的 app.css / 主题规则
+   （含用户 CSS variable 与更高优先级声明），导出侧必须赢。 */
 .jx-export .markdown-preview-view,
 .jx-export .markdown-rendered,
 .jx-export .markdown-source-view {
@@ -98,8 +102,15 @@ html, body.jx-export {
 
 /* ---------- 正文元素 ---------- */
 
-.jx-content > *:first-child { margin-top: 0 !important; }
-.jx-content > *:last-child { margin-bottom: 0 !important; }
+.jx-export .jx-content > *:first-child { margin-top: 0; }
+.jx-export .jx-content > *:last-child { margin-bottom: 0; }
+
+/* 页首间隙：加在「每一页的内容区」上（分页后由脚本给正文页打 jx-body-page）。
+   不要加在 pre/blockquote/callout 等带底色块的 padding-top 上——
+   那会在灰底代码块里多出一条空白条，而不是页眉到正文的间距。 */
+.pagedjs_page .pagedjs_page_content.jx-body-page {
+  padding-top: var(--jx-page-gap);
+}
 
 .jx-content p {
   margin: 0 0 0.9em;
@@ -259,6 +270,16 @@ html, body.jx-export {
   background: none;
   padding: 0;
   font-size: inherit;
+}
+
+/* 纸面上不要编辑器交互控件：代码块复制按钮等 */
+.jx-content .copy-code-button,
+.jx-content .code-block-flair,
+.jx-content pre button,
+.jx-content .block-language-code button,
+.jx-export .copy-code-button {
+  display: none !important;
+  visibility: hidden !important;
 }
 
 /* ---------- 引用块 ---------- */
